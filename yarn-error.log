@@ -1,0 +1,36 @@
+Arguments: 
+  C:\Program Files\nodejs\node.exe C:\Program Files (x86)\Yarn\bin\yarn.js init
+
+PATH: 
+  C:\Program Files (x86)\VMware\VMware Player\bin\;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\MinGW\bin;C:\Program Files\OpenSSL-Win64\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\heroku\bin;C:\Program Files\Geth;C:\Program Files\Git\cmd;C:\Users\rayan\AppData\Roaming\nvm;C:\Program Files\nodejs;C:\Program Files (x86)\Yarn\bin\;C:\Program Files\Mullvad VPN\resources;C:\Users\Neb\.cargo\bin;C:\Users\Neb\AppData\Local\Programs\Python\Python39\Scripts\;C:\Users\Neb\AppData\Local\Programs\Python\Python39\;C:\Users\Neb\AppData\Local\Microsoft\WindowsApps;C:\Users\Neb\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Neb\AppData\Local\Microsoft\WindowsApps;C:\Users\Neb\AppData\Local\Gpg4win\..\GnuPG\bin;C:\Users\Neb\AppData\Local\Programs\Git\cmd;C:\Users\Neb\AppData\Local\GitHubDesktop\bin;C:\Users\Neb\AppData\Roaming\npm
+
+Yarn version: 
+  1.22.15
+
+Node version: 
+  12.20.1
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: canceled
+      at Interface.<anonymous> (C:\Program Files (x86)\Yarn\lib\cli.js:137145:13)
+      at Interface.emit (events.js:314:20)
+      at Interface._ttyWrite (readline.js:868:16)
+      at ReadStream.onkeypress (readline.js:205:10)
+      at ReadStream.emit (events.js:314:20)
+      at emitKeys (internal/readline/utils.js:335:14)
+      at emitKeys.next (<anonymous>)
+      at ReadStream.onData (readline.js:1137:36)
+      at ReadStream.emit (events.js:314:20)
+      at addChunk (_stream_readable.js:297:12)
+
+npm manifest: 
+  No manifest
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
