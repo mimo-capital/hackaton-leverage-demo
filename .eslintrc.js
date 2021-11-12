@@ -15,6 +15,12 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 12,
   },
+  "prettier/prettier": [
+    "error",
+    {
+      "endOfLine": "off"
+    },
+  ],
   rules: {
     "node/no-unsupported-features/es-syntax": [
       "error",

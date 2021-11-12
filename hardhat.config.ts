@@ -23,8 +23,13 @@ task('accounts', 'Prints the list of accounts', async (taskArgs, hre) => {
 // Go to https://hardhat.org/config/ to learn more
 
 const config: HardhatUserConfig = {
-  solidity: '0.8.4',
+  solidity: '0.6.12',
   networks: {
+    hardhat: {
+      forking: {
+        url: "https://eth-mainnet.alchemyapi.io/v2/Cd1UvsRaXBEpHIJB7QSe1INVnmSN67I6",
+      },
+    },
     ropsten: {
       url: process.env.ROPSTEN_URL || '',
       accounts:

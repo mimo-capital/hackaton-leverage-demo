@@ -8,6 +8,7 @@ import "@openzeppelin/contracts/math/SafeMath.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
 import { ILendingPool } from "@aave/protocol-v2/contracts/interfaces/ILendingPool.sol";
 import { FlashLoanReceiverBase } from "@aave/protocol-v2/contracts/flashloan/base/FlashLoanReceiverBase.sol";
+import "hardhat/console.sol";
 
 import "./interfaces/IVault.sol";
 import "./interfaces/IAddressProvider.sol";
@@ -23,7 +24,7 @@ contract Leverage is Ownable {
   IAddressProvider public a;
   ILendingPool public lendingPool;
 
-  function initialize(IAddressProvider _a, ILendingPool _lendingPool) external {
+  constructor(IAddressProvider _a, ILendingPool _lendingPool) public {
     require(address(a) == address(0));
     require(address(_a) != address(0));
     require(address(_lendingPool) != address(0));
@@ -37,7 +38,7 @@ contract Leverage is Ownable {
     address[] calldata assets,
     uint256[] calldata amounts,
     uint256[] calldata premiums,
-    address initiator,
+    _,
     bytes calldata params
   ) external returns (bool) {
     require(msg.sender == address(lendingPool), "caller must be lendingPool");
@@ -47,13 +48,27 @@ contract Leverage is Ownable {
 
     bytes32 poolId = abi.decode(params, (bytes32));
 
+    // how much WETH we have to pay back to Aave
     uint256 repayAmount = amounts[0] + premiums[0];
-    uint256 repayValue = a.priceFeed().convertFrom(assets[0], repayAmount);
-    token.approve(address(a.core()), token.balanceOf(address(this)));
-    a.core().depositAndBorrow(assets[0], token.balanceOf(address(this)), repayValue);
+    console.log("repayAmount", repayAmount);
 
+    // how much PAR do we want to borrow, we convert our repay amount to PAR
+    uint256 borrowAmount = a.priceFeed().convertFrom(assets[0], repayAmount);
+    borrowAmount = borrowAmount.mul(110).div(100);
+    console.log("borrowAmount", borrowAmount);
+    console.log("token balance", token.balanceOf(address(this)));
+
+    token.approve(address(a.core()), 2 ** 256 - 1);
+    a.core().depositAndBorrow(assets[0], token.balanceOf(address(this)), borrowAmount);
+
+    // sell ALL the PAR we just borrowed for ETH
     _swapAsset(poolId, assets[0]);
+
+    // approve the WETH we borrowed from AAVE to be reepayed
     token.approve(address(lendingPool), repayAmount);
+
+    // deposit in the vault we have leftover
+    a.core().deposit(assets[0], token.balanceOf(address(this)) - repayAmount);
 
     return true;
   }
@@ -97,6 +112,8 @@ contract Leverage is Ownable {
   function _swapAsset(bytes32 poolId, address asset) internal {
     bytes memory userData = abi.encode();
     IERC20 stablex = IERC20(a.stablex());
+
+    console.log("PAR balance before swap", stablex.balanceOf(address(this)));
 
     stablex.approve(address(BALANCER_VAULT), stablex.balanceOf(address(this)));
     IVault.SingleSwap memory singleSwap = IVault.SingleSwap(
